@@ -26,3 +26,19 @@ model = GradientQLearning(𝒫.𝒜, 𝒫.γ, Q, ∇Q, θ, α) ε = 0.1 # probab
 π = EpsilonGreedyExploration(ε)
 k = 20 # number of steps to simulate
 s = 0.0 # initial state simulate(𝒫, model, π, k, s)
+
+
+
+mutable struct LocallyWeightedValueFunction 
+    k # kernel function k(s, s′)
+    S # set of discrete states
+    θ # vector of values at states in S
+end 
+function (Uθ::LocallyWeightedValueFunction)(s)
+    w = normalize([Uθ.k(s,s′) for s′ in Uθ.S], 1)
+    return Uθ.θ ⋅ w
+end
+function fit!(Uθ::LocallyWeightedValueFunction, S, U) 
+    Uθ.θ = U
+    return Uθ
+end 

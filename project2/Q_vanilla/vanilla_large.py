@@ -3,6 +3,8 @@ from statistics import mode
 import numpy as np
 import csv
 
+MAX_ITERATIONS = 100
+
 class QLearning:
     def __init__(self, n_states, n_actions, discount, learning_rate):
         self.n_states = n_states
@@ -21,7 +23,7 @@ class QLearning:
         self.Q[s, a] +=  update
 
 def data_batch(model):
-    with open('data/large.csv', newline='') as csvfile:
+    with open('./data/large.csv', newline='') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
         i = 0
@@ -33,12 +35,10 @@ def data_batch(model):
 
 def main():
 
-    model = QLearning(n_states=312020, n_actions=9, discount=0.95, learning_rate=0.001)
+    model = QLearning(n_states=312020, n_actions=9, discount=.95, learning_rate=0.001)
 
-    for i in range(100):
+    for i in range(MAX_ITERATIONS):
         data_batch(model)
-
-        # print(model.Q[0])
 
     with open('policies/large.policy', 'w') as f:
         for row in model.Q:
