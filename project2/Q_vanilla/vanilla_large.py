@@ -2,6 +2,7 @@ from pyexpat import model
 from statistics import mode
 import numpy as np
 import csv
+from tqdm import tqdm
 
 MAX_ITERATIONS = 100
 
@@ -23,7 +24,7 @@ class QLearning:
         self.Q[s, a] +=  update
 
 def data_batch(model):
-    with open('./data/large.csv', newline='') as csvfile:
+    with open('../data/large.csv', newline='') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
         i = 0
@@ -37,7 +38,7 @@ def main():
 
     model = QLearning(n_states=312020, n_actions=9, discount=.95, learning_rate=0.001)
 
-    for i in range(MAX_ITERATIONS):
+    for i in tqdm(range(MAX_ITERATIONS)):
         data_batch(model)
 
     with open('policies/large.policy', 'w') as f:

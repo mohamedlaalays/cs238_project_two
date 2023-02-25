@@ -2,8 +2,9 @@ from pyexpat import model
 from statistics import mode
 import numpy as np
 import csv
+from tqdm import tqdm
 
-MAX_ITERATIONS = 1
+MAX_ITERATIONS = 100
 
 class QLearning:
     def __init__(self, n_states, n_actions, discount, learning_rate):
@@ -37,10 +38,10 @@ def main():
 
     model = QLearning(n_states=500*100, n_actions=7, discount=1, learning_rate=0.001)
 
-    for i in range(MAX_ITERATIONS):
+    for i in tqdm(range(MAX_ITERATIONS)):
         data_batch(model)
 
-    with open('/policies/medium.policy', 'w') as f:
+    with open('policies/medium.policy', 'w') as f:
         for row in model.Q:
             # print(row)
             action = np.argmax(row) + 1
